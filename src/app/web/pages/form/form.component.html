@@ -1,0 +1,346 @@
+<section class="container py-4">
+    <div class="mb-4">
+        <div class="container-fluid py-2">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                  <form  id="registration" [formGroup]="orderForm" (ngSubmit)="onSubmit()">
+                    <nav>
+                      <div class="nav nav-pills nav-fill" id="nav-tab" role="tablist">
+                        <a class="nav-link  active pointer" id="step1-tab" data-bs-toggle="tab" data-bs-target="#step1" role="tab" aria-controls="step1" aria-selected="true">Assignment Details</a>
+                        <a class="nav-link pointer" id="step2-tab" data-bs-toggle="tab" data-bs-target="#step2" role="tab" aria-controls="step2" aria-selected="false">Extra Features</a>
+                        <a class="nav-link pointer" id="step3-tab" data-bs-toggle="tab" data-bs-target="#step3" role="tab" aria-controls="step3" aria-selected="false">Checkout</a>
+                      </div>
+                    </nav>
+                    <div class="tab-content p-3  my-3" id="nav-tabContent">
+                      <div class="tab-pane fade active show" id="step1" role="tabpanel" aria-labelledby="step1" tabindex="0">
+                        <div class="row g-3">
+                            <div class="col-md-7 rounded-3 bg-light-brown p-3">
+                                <div class="row g-3">
+                                    <div class="col-sm-6">
+                                      <label for="assignmentType" class="form-label">Assignment type</label>
+                                      <select class="form-select" id="assignmentType" formControlName="assignmentType" required="" (change)="changeAssignment($event)" 
+                                     >
+                                        <option value="" hidden>Choose...</option>
+                                        <ng-container *ngFor="let item of categories;let i = index">
+                                            <option [value]="item.type">{{item.name}}</option>
+                                        </ng-container>
+                                      </select>
+                                      <div class="invalid-feedback">
+                                        Valid first name is required.
+                                      </div>
+                                    </div>
+                        
+                                    <div class="col-sm-6">
+                                      <label for="studylevel" class="form-label">Study Level</label>
+                                      <select class="form-select" id="studylevel" formControlName="studyLevel" required=""
+                                      (change)="changeLevel($event)">
+                                        <option value="" hidden>Choose...</option>
+                                        <ng-container *ngFor="let item of studyLevels;let i = index">
+                                            <option [value]="item.value">{{item.name}}</option>
+                                        </ng-container>
+                                      </select>
+                                      <div class="invalid-feedback" >
+                                        Valid last name is required.
+                                      </div>
+                                    </div>
+        
+                                    <div class="col-sm-6">
+                                        <label for="nofpages" class="form-label">Number of pages</label>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text pointer" (click)="setNoOfPages('dec')">-</span>
+                                            <input type="text" class="form-control"  id="nofpages" aria-label="Amount (to the nearest dollar)" formControlName="noOfPages" required=""
+                                            >
+                                            <span class="input-group-text pointer" (click)="setNoOfPages('inc')">+</span>
+                                          </div>
+          
+                                        <div class="invalid-feedback" >
+                                          Valid first name is required.
+                                        </div>
+                                      </div>
+                          
+                                      <div class="col-sm-6">
+                                        <label for="studylevel" class="form-label">Deadline</label>
+                                        <select class="form-select" id="studylevel" formControlName="deadLine" required=""
+                                        (change)="changeDeadline($event)">
+                                          <option value="">Choose...</option>
+                                          <ng-container *ngFor="let item of deadline;let i = index">
+                                              <option [value]="item.value">{{item.name}}</option>
+                                          </ng-container>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                          Valid last name is required.
+                                        </div>
+                                      </div>
+                        
+                                    <div class="col-12">
+                                      <label for="username" class="form-label">Order instructions <span class="text-warning">* required</span></label>
+                                      <textarea type="email" class="form-control" maxlength="8000" rows="3" id="email" placeholder="Type your instructions here. Please provide as many details as possible." formControlName="orderInstructions" required=""
+                                      ></textarea>
+        
+                                    </div>
+                                    <div class="col-12 upload-instruction">
+                                      <label for="fileinst" class="form-label btn-link">Upload instructions</label>
+                                      <input class="form-control" type="file"  id="fileinst" #fileInput (change)="onFileChange($event)">
+                                    </div>
+                                    <div class="col-12">
+                                     
+                                      <div class="form-group instruction-files">
+                                        <output class="files" id="instructions-files-list">
+                                          <ng-container *ngFor="let file of instructionFileNameList;let i = index;">
+                                            <span class="file" data-file-name="sample_Example.xlsx">
+                                              <span class="file-name" title="sample_Example.xlsx">{{file}}</span>
+                                        
+                                              <button class="remove-btn" type="button" tabindex="-1" title="Remove file">
+                                                <span class="z-index--1"><i class="bi bi-x"></i></span>
+                                              </button>
+                                        
+                                              <input class="file-name-input" type="hidden" name="OrderForm[filenames][]" value="sample_Example.xlsx">
+                                            </span>
+                                          </ng-container>
+                                          
+                                        </output>
+                                      </div>
+                                    </div>
+                                  </div>
+                        
+                                  <hr class="my-4">
+                        
+                                
+                                  <div class="row gy-3">
+                                    <div class="col-md-8">
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <label for="inputPassword6" class="col-form-label">Citation style</label>
+                                              </div>
+                                              <div class="col-md-9 pl-md-2">
+                                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                                  <ng-container *ngFor="let item of citations;let i = index;">
+
+                                                    <input type="radio" class="btn-check" name="citation" id="btnradio{{i}}" autocomplete="off" formControlName="citation" value="{{item.value}}" (click)="changeCitation($event)">
+                                                    <label class="btn btn-outline-primary" for="btnradio{{i}}">{{item.name}}</label>
+
+                                                  </ng-container>
+                                                    <!-- <input type="radio" class="btn-check" name="citation" id="btnradio1" autocomplete="off" formControlName="citation" value="APA6">
+                                                    <label class="btn btn-outline-primary" for="btnradio1">APA6</label>
+                                                
+                                                    <input type="radio" class="btn-check" name="citation" id="btnradio2" autocomplete="off" formControlName="citation" value="APA7">
+                                                    <label class="btn btn-outline-primary" for="btnradio2">APA7</label>
+                                                
+                                                    <input type="radio" class="btn-check" name="citation" id="btnradio3" autocomplete="off" formControlName="citation" value="MLA">
+                                                    <label class="btn btn-outline-primary" for="btnradio3">MLA</label>
+                                                    <input type="radio" class="btn-check" name="citation" id="btnradio3" autocomplete="off" formControlName="citation" value="Other">
+                                                    <label class="btn btn-outline-primary" for="btnradio3">Other</label>
+                                                    <input type="radio" class="btn-check" name="citation" id="btnradio3" autocomplete="off" formControlName="citation" value="No">
+                                                    <label class="btn btn-outline-primary" for="btnradio3">No</label> -->
+                                                </div>
+                                              </div>
+                                             
+                                        </div>
+                                       
+                                    </div>
+                        
+                                    <div class="col-md-4">
+                                        <div class="row">
+                                            <div class="col-auto">
+                                                <label for="source" class="col-form-label">Sources</label>
+                                              </div>
+                                              <div class="col-auto">
+                                                <select class="form-select" id="source" formControlName="source" required="">
+                                                    <option value="">Choose...</option>
+                                                    <ng-container *ngFor="let item of sources;let i = index">
+                                                        <option [value]="item">{{item}}</option>
+                                                    </ng-container>
+                                                  </select>
+                                              </div>
+                                        </div>
+                                       
+                                    </div>
+                        
+                        
+                                  </div>
+                                  <div class="row gy-3" *ngIf="orderForm.get('citation') && orderForm.get('citation')?.value === 'other'">
+                                    <div class="col-8">
+                                       <div class="row">
+                                        <div class="col-3"></div>
+                                        <div class="col-8">
+                                          <select class="form-select" id="citationStyle" formControlName="citationStyle" required>
+                                            <option value="">Choose...</option>
+                                            <ng-container *ngFor="let item of citationOther;let i = index">
+                                                <option [value]="item.value">{{item.name}}</option>
+                                            </ng-container>
+                                          </select>
+                                        </div>
+                                       </div>
+                                    </div>
+                                   
+                                    
+                                  </div>
+                                  <hr class="my-2">
+                        
+                                  <button class="w-100 btn btn-primary btn-lg" type="submit" >Continue to checkout</button>
+                            </div>
+                            <div class="col-md-5 col-lg-4 order-md-last">
+                                <form class="mb-2">
+                                    <div class="input-group">
+                                      <input type="text" class="form-control" name="promocode" [(ngModel)]="promocode" placeholder="Promo code" required>
+                                      <button type="submit" class="btn btn-secondary" (click)="checkPromocode()">{{reedemText}}</button>
+                                    </div>
+                                  </form>
+                                <ul class="list-group mb-3">
+                                  <li class="list-group-item d-flex justify-content-between lh-sm">
+                                    <div>
+                                      <h5 class="my-0 fw-bolder">Sub total</h5>
+                                    </div>
+                                    <span class="text-body-secondary fw-bolder">${{subTotal}}</span>
+                                  </li>
+                                  <ng-container *ngIf="isReedemed">
+                                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                                      <div>
+                                        <h6 class="my-0">You Saved</h6>
+                                      </div>
+                                      <span class="text-body-secondary">$5</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between bg-body-tertiary">
+                                      <div class="text-success">
+                                        <h6 class="my-0">Promo code</h6>
+                                        <small>{{promocode}}</small>
+                                      </div>
+                                      <span class="text-success">−$5</span>
+                                    </li>
+                                  </ng-container>
+                                  
+                                 
+                                 
+                                  <li class="list-group-item d-flex justify-content-between">
+                                    <span>Total (USD)</span>
+                                    <strong>${{total}}</strong>
+                                  </li>
+                                </ul>
+                        
+                                
+                              </div>
+                        </div>
+                       
+                      </div>
+                      <div class="tab-pane fade" id="step2" role="tabpanel" aria-labelledby="step2" tabindex="0">
+                        <div class="row g-3 justify-content-center">
+                          <div class="col-md-3">
+                            <h6>Helful extras</h6>
+                            <ul class="list-group border-0">
+                              <li class="list-group-item border-0">
+                                <div class="d-flex w-100">
+                                  <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckbox">
+                                <label class="form-check-label" for="firstCheckbox">Originality report</label>
+                                </div>
+                               
+                                <small class="ms-3 font-xs">And some small print.</small>
+
+                              </li>
+                              <li class="list-group-item border-0">
+                                <input class="form-check-input me-1" type="checkbox" value="" id="secondCheckbox">
+                                <label class="form-check-label" for="secondCheckbox">Urgent expert assign </label>
+                              </li>
+                              <li class="list-group-item border-0">
+                                <input class="form-check-input me-1" type="checkbox" value="" id="thirdCheckbox">
+                                <label class="form-check-label" for="thirdCheckbox">Copies of sources</label>
+                              </li>
+                              <li class="list-group-item border-0">
+                                <input class="form-check-input me-1" type="checkbox" value="" id="thirdCheckbox">
+                                <label class="form-check-label" for="thirdCheckbox">Outline</label>
+                              </li>
+                              <li class="list-group-item border-0">
+                                <input class="form-check-input me-1" type="checkbox" value="" id="thirdCheckbox">
+                                <label class="form-check-label" for="thirdCheckbox">Title page</label>
+                              </li>
+                            </ul>
+                          </div>
+                          <div class="col-md-4 rounded-3 bg-light-brown p-2">
+                            <div class="summary">
+                              <div class="d-flex w-100 justify-content-between">
+                                <h5>Order Summary</h5>
+                                <a class="btn-link" href="#">Edit order</a>
+                              </div>
+                              
+                              <ul class="list-unstyled text-small">
+                                <li class="mb-1">Assignment type: {{orderFormValue.assignmentType}}</li>
+                                <li class="mb-1">Study level: {{orderFormValue.assignmentType}}</li>
+                                <li class="mb-1">Deadline: {{getDealineString()}}</li>
+                                <li class="mb-1">Pages: {{getPageString()}}</li>
+                                <li class="mb-1"><i class="bi bi-check2-all"></i> 2 files</li>
+                                <li class="mb-1"><i class="bi bi-check2-all"></i>Order instructions</li>
+                              </ul>
+                              <hr class="my-2">
+                              <ul class="list-group mb-3 border-0 bg-none">
+                                <li class="list-group-item d-flex justify-content-between lh-sm border-0 bg-none">
+                                  <div>
+                                    <h5 class="my-0 fw-bolder">Sub total</h5>
+                                  </div>
+                                  <span class="text-body-secondary fw-bolder">${{subTotal}}</span>
+                                </li>
+                                <li class="list-group-item  lh-sm border-0 bg-none">
+                                  <input class="form-check-input me-1" type="checkbox" name="enableRedeem" [(ngModel)]="enableRedeem" value="" id="secondCheckbox" (click)="getEnable()">
+                                  <label class="form-check-label" for="secondCheckbox">Discount code</label>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between lh-sm border-0 bg-none" *ngIf="enableRedeem">
+                                  <form class="mb-2">
+                                    <div class="input-group">
+                                      <input type="text" class="form-control" name="promocode" [(ngModel)]="promocode" placeholder="Promo code" required>
+                                      <button type="submit" class="btn btn-secondary" (click)="checkPromocode()">{{reedemText}}</button>
+                                    </div>
+                                  </form>
+                                </li>
+                               
+                                <ng-container *ngIf="isReedemed">
+                                  <li class="list-group-item d-flex justify-content-between lh-sm border-0 bg-none">
+                                    <div>
+                                      <h6 class="my-0">You Saved</h6>
+                                    </div>
+                                    <span class="text-body-secondary">$5</span>
+                                  </li>
+                                  <li class="list-group-item d-flex justify-content-between bg-body-tertiary border-0 bg-none">
+                                    <div class="text-success">
+                                      <span class="my-0">Promo code</span>
+                                      <small>{{promocode}}</small>
+                                    </div>
+                                    <span class="text-success">−$5</span>
+                                  </li>
+                                </ng-container>
+                                
+                               
+                               
+                                <li class="list-group-item d-flex justify-content-between border-0 bg-none">
+                                  <h5 class="my-0 fw-bolder">Total</h5>
+                                  <strong>${{total}}</strong>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <div class="tab-pane fade" id="step3" role="tabpanel" aria-labelledby="step3" tabindex="0">
+                        <h4>Review your information</h4>
+                        <div class="mb-3">
+                          <label for="first_name">Required field 1</label>
+                          <input type="text" class="form-control-plaintext" value="Lorem ipsum dolor sit amet" id="first_name">
+                        </div>
+                        <div class="mb-3">
+                          <label for="first_name">Optional field</label>
+                          <input type="text" class="form-control-plaintext" value="Lorem ipsum dolor sit amet" id="first_name">
+                        </div>
+                        <div class="mb-3">
+                          <label for="first_name">Required field 2</label>
+                          <input type="text" class="form-control-plaintext" value="Lorem ipsum dolor sit amet" id="first_name">
+                        </div>
+                      </div>
+                    </div>
+                   
+                  </form>
+                </div>
+              </div>
+        </div>
+      </div>
+
+   
+</section>
